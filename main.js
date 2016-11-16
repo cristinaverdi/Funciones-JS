@@ -8,14 +8,14 @@ console.log("media: " + avg);
 let multNumbers = multiply([1,2,3,4,5], 5);
 console.log("Multiplication: " + multNumbers);
 
-let object = constructObject([45, 78, 39, 12]);
+let object = showStatistics([45, 78, 12, 39]);
 console.log("The new object looks like: " + object);
 
-let encoded = encoder("Noviembre", 2);
+let encoded = encoder("noviembre", 2);
 console.log("The encoded word is: " + encoded);
 
-let decodedWord = decodifier("ctdqn");
-console.log("The decoded word is: " + encoded);
+//let decodedWord = decodifier("ctdqn");
+//console.log("The decoded word is: " + decodedWord);
 
 //1- Recibe un array y retorna la suma de todos los números.
 
@@ -62,54 +62,53 @@ function multiply(num, mult) {
 
 //4- Recibe un array y retorna un objeto con varias propiedades (estadísticas del array): suma, media, máximo y mínimo.
 
-function constructObject(num) {
-  let total = 0;
-  let max = 0;
-  let min = 0;
-  let average = 0;
+function showStatistics(num) {
+  
+  let statistics = {
+    total: 0,
+    average: 0,
+    max: num[0],
+    min: num[0]
+  }
   
   for (var i = 0; i < num.length; i++) {
-    total += num[i];
-    average = total / num.length;
+    statistics.total += num[i];
+    statistics.average = statistics.total / num.length;
     //**Evalúa true si el valor del ítem actual es mayor que el min. Entonces, nuevo máximo = a valor de ítem actual
-    if (num[i] > max) {
-      max = num[i];
+    if (num[i] > statistics.max) {
+      statistics.max = num[i];
     }
     //**Evalúa true si el valor del ítem actual es menor que el min. Entonces, nuevo mínimo = a valor de ítem actual.
-    if (num[i] < min) {
-      min = num[i];
-    }
+    
+    if (num[i] < statistics.min) {
+      statistics.min = num[i];
+    } 
   }
   
   //**Duda existencial. Tengo que pasar todos los resultados a string antes de meterlos en el objeto? Resp: no, no hace falta, porque xxx(justificar)
-  let object = {
-    sum: total,
-    average: average,
-    max: max,
-    min: min
-  }
-  return object;
+  return statistics;
 }
 
 //5.a: Una función que recibe un texto y un número x y cambia cada letra por la letra que está x posiciones después en el abecedario:
 
 //** Duda existencial: 1.qué pasaría cuando mi palabra tiene el caracter "z"? cómo le digo que vuelva a empezar por "a"? Resp: con un if !! 2. Si en vez de una palabra, tengo un texto, qué hay de los espacios blancos?
 
-function encoder(text, positionForward) {
+function encoder(word, positionForward) {
   
   let alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-  let currentCharacter;
-  let newCharacter;
+  
   let codedWord;
+      codedWord = "";
   
   // **A tener en cuenta: la variable text es como si fuera una array de n caracteres (letras y espacios) encadenados (+) unos a otros.
 
-  for (var i = 0; i < text.length; i++) {
+  for (var i = 0; i < word.length; i++) {
     // **currentCharacter me dice la posición(índice aka número) del caracter que está recorriendo en esta vuelta.
-    currentCharacter = text[i];
+    let currentCharacter = word[i];
     //**Aquí le digo que mi nueva letra va a ser la que que corresponde al índice del elemento(letra) actual + positionForward posiciones adelante. Estoy sumando índices (números).
-    newCharacter = alphabet.indexOf(currentCharacter + positionForward);
-    codedWord += [newCharacter[i]];
+    let currentCharacterPosition = alphabet.indexOf(currentCharacter);
+    let newCharacter = alphabet[currentCharacterPosition + positionForward];
+    codedWord += newCharacter;
   }
   return codedWord;
 }
@@ -118,16 +117,19 @@ function encoder(text, positionForward) {
 
 //** Duda existencial: 1.qué pasaría cuando mi palabra tiene el caracter "a"? cómo le digo que vuelva a empezar por "z"? Resp: con un if !! 2. Si en vez de una palabra, tengo un texto, qué hay de los espacios blancos?
 
+/*
 function decodifier(word, (-1*positionForward)) {
   
   let alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-  let currentCharacter;
-  let newCharacter;
+  
+  
   let decodedWord;
 
   for (var i = 0; i < word.length; i++) {
+    let currentCharacter;
     currentCharacter = word[i];
     // -positionForward indica: ve hacia -positionForward es decir, hacia atrás.
+    let newCharacter;
     newCharacter = alphabet.indexOf(currentCharacter + (-1*positionForward));
     decodedWord += [newCharacter[i]];
   }
