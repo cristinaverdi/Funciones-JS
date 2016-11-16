@@ -11,7 +11,7 @@ console.log("Multiplication: " + multNumbers);
 let object = showStatistics([45, 78, 12, 39]);
 console.log("The new object looks like: " + object);
 
-let encoded = encoder("noviembre", 2);
+let encoded = encoder("zarzamora", 2);
 console.log("The encoded word is: " + encoded);
 
 //let decodedWord = decodifier("ctdqn");
@@ -91,7 +91,7 @@ function showStatistics(num) {
 
 //5.a: Una función que recibe un texto y un número x y cambia cada letra por la letra que está x posiciones después en el abecedario:
 
-//** Duda existencial: 1.qué pasaría cuando mi palabra tiene el caracter "z"? cómo le digo que vuelva a empezar por "a"? Resp: con un if !! 2. Si en vez de una palabra, tengo un texto, qué hay de los espacios blancos?
+//** Duda existencial: Si en vez de una palabra, tengo un texto, qué hay de los espacios blancos?
 
 function encoder(word, positionForward) {
   
@@ -103,12 +103,18 @@ function encoder(word, positionForward) {
   // **A tener en cuenta: la variable text es como si fuera una array de n caracteres (letras y espacios) encadenados (+) unos a otros.
 
   for (var i = 0; i < word.length; i++) {
-    // **currentCharacter me dice la posición(índice aka número) del caracter que está recorriendo en esta vuelta.
     let currentCharacter = word[i];
-    //**Aquí le digo que mi nueva letra va a ser la que que corresponde al índice del elemento(letra) actual + positionForward posiciones adelante. Estoy sumando índices (números).
-    let currentCharacterPosition = alphabet.indexOf(currentCharacter);
-    let newCharacter = alphabet[currentCharacterPosition + positionForward];
-    codedWord += newCharacter;
+    let newCharacter = "";
+    if (currentCharacter == "z") {
+      // si condición anterior = true, newCharacter será "a" + (prositionForward -1) adelante.
+      let positionForward1 = positionForward - 1;
+      newCharacter = alphabet[0 + positionForward1];
+    } else{
+      let currentCharacterPosition = alphabet.indexOf(currentCharacter);
+      newCharacter = alphabet[currentCharacterPosition + positionForward];
+    }
+    // ¡Cambio importante!: codedword debe estar FUERA de los statements if/else, pero DENTRO del bucle.
+    codedWord += newCharacter;  
   }
   return codedWord;
 }
