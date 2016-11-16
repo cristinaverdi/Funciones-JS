@@ -8,14 +8,14 @@ console.log("media: " + avg);
 let multNumbers = multiply([1,2,3,4,5], 5);
 console.log("Multiplication: " + multNumbers);
 
-let object = showStatistics([45, 78, 12, 39]);
-console.log("The new object looks like: " + object);
+let data = showStatistics([45, 78, 12, 39]);
+console.log("The new object looks like: " + data);
 
-let encoded = encoder("zarzamora", 2);
-console.log("The encoded word is: " + encoded);
+let encoded = encoder("zarzamora me gusta", 2);
+console.log("The encoded text is: " + encoded);
 
-//let decodedWord = decodifier("ctdqn");
-//console.log("The decoded word is: " + decodedWord);
+let decodedWord = decodifier("ctdqn", 2);
+console.log("The decoded text is: " + decodedWord);
 
 //1- Recibe un array y retorna la suma de todos los números.
 
@@ -100,7 +100,7 @@ function encoder(word, positionForward) {
   let codedWord;
       codedWord = "";
   
-  // **A tener en cuenta: la variable text es como si fuera una array de n caracteres (letras y espacios) encadenados (+) unos a otros.
+  // **A tener en cuenta: la variable word es como si fuera una array de n caracteres (letras y espacios) encadenados (+) unos a otros.
 
   for (var i = 0; i < word.length; i++) {
     let currentCharacter = word[i];
@@ -109,7 +109,10 @@ function encoder(word, positionForward) {
       // si condición anterior = true, newCharacter será "a" + (prositionForward -1) adelante.
       let positionForward1 = positionForward - 1;
       newCharacter = alphabet[0 + positionForward1];
-    } else{
+    } 
+    else if (currentCharacter == " ") {
+      newCharacter = "%";  
+    }else{
       let currentCharacterPosition = alphabet.indexOf(currentCharacter);
       newCharacter = alphabet[currentCharacterPosition + positionForward];
     }
@@ -123,21 +126,26 @@ function encoder(word, positionForward) {
 
 //** Duda existencial: 1.qué pasaría cuando mi palabra tiene el caracter "a"? cómo le digo que vuelva a empezar por "z"? Resp: con un if !! 2. Si en vez de una palabra, tengo un texto, qué hay de los espacios blancos?
 
-/*
-function decodifier(word, (-1*positionForward)) {
-  
-  let alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-  
-  
-  let decodedWord;
 
-  for (var i = 0; i < word.length; i++) {
-    let currentCharacter;
-    currentCharacter = word[i];
-    // -positionForward indica: ve hacia -positionForward es decir, hacia atrás.
-    let newCharacter;
-    newCharacter = alphabet.indexOf(currentCharacter + (-1*positionForward));
-    decodedWord += [newCharacter[i]];
+function decodifier(word, positionForward) {
+  let positionBackwards = -1*positionForward;
+  let alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+  let decodedWord;
+      decodedWord = "";
+
+  for (var i = (word.length -1); i >= 0; i--) {
+    let currentCharacter = word[i];
+    let newCharacter = "";
+    if (currentCharacter == "a") {
+      newCharacter = alphabet[26 - (positionBackwards + 1)] 
+    } else if ( currentCharacter == " ") {
+      newCharacter = "%";
+    } else {
+      // -positionForward indica: ve -positionForward letras hacia atrás.
+      let currenCharacterPosition = alphabet.indexOf(currentCharacter);
+      newCharacter = alphabet[currenCharacterPosition - positionForward];  
+    }
+    decodedWord += newCharacter; 
   }
   return decodedWord;
 }
